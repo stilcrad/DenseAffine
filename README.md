@@ -33,9 +33,16 @@ Download the weights at https://www.hostize.com/v/l6QfCxsupf. Put it in weights 
 ```shell
 
 python demo/affine_feature_estimator.py
-
-The matching results of the images are saved in the results folder.
 ```
+The matching results of the images are saved in the results folder.
+
+Download the KITTI sequens 04 for relative pose estimation. The URL of the dataset is  https://www.hostize.com/v/McLvy6jmUF
+```shell
+
+python demo/affine_feature_relative_pose.py
+```
+
+
 ## Acknowledgements
 
 We have used code and been inspired by https://github.com/Parskatt/dkm, https://github.com/laoyandujiang/S3Esti, and https://github.com/ducha-aiki/affnet, https://github.com/DagnyT/hardnet, https://github.com/Reagan1311/LOCATE, https://github.com/danini/graph-cut-ransac. Sincere thanks to these authors for their codes.
