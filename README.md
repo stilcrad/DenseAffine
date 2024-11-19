@@ -31,8 +31,9 @@ pip install -r requirements.txt
 
 ```shell
 
-python test.py 
+python demo/affine_feature_estimator.py
 
+The matching results of the images are saved in the results folder.
 ```
 ## Acknowledgements
 
