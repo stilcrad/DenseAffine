@@ -27,6 +27,7 @@ pip install -r requirements.txt
 ```
 
 ## Get start
+Download the weights at https://www.hostize.com/v/l6QfCxsupf. Put it in weights folder.
 
 
 ```shell
