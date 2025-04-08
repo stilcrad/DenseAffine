@@ -27,7 +27,7 @@ pip install -r requirements.txt
 ```
 
 ## Get start
-Download the weights at https://pan.baidu.com/s/1EdsAqKJ1HKVS5uLPMAxDSQ?pwd=idw2 password: idw2. Put it in weights folder.
+Download the weights at https://pan.baidu.com/s/1EdsAqKJ1HKVS5uLPMAxDSQ?pwd=idw2 password: idw2 or [https://drive.google.com/file/d/1W82QJ5lgrsVQql30k_NZWZE5YH9lhgaE/view?usp=drive_link](https://drive.google.com/file/d/1W82QJ5lgrsVQql30k_NZWZE5YH9lhgaE/view?usp=drive_link).  Put it in weights folder.
 
 
 ```shell
@@ -36,7 +36,7 @@ python demo/affine_feature_estimator.py
 ```
 The matching results of the images are saved in the results folder.
 
-Download the KITTI sequens 04 for relative pose estimation. The URL of the dataset is https://pan.baidu.com/s/1EdsAqKJ1HKVS5uLPMAxDSQ?pwd=idw2 password: idw2
+Download the KITTI sequens 04 for relative pose estimation. The URL of the dataset is https://pan.baidu.com/s/1EdsAqKJ1HKVS5uLPMAxDSQ?pwd=idw2 password: idw2 or [https://drive.google.com/file/d/1W82QJ5lgrsVQql30k_NZWZE5YH9lhgaE/view?usp=drive_link](https://drive.google.com/file/d/1W82QJ5lgrsVQql30k_NZWZE5YH9lhgaE/view?usp=drive_link).
 ```shell
 
 python demo/affine_feature_relative_pose.py
