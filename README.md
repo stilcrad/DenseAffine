@@ -46,3 +46,12 @@ python demo/affine_feature_relative_pose.py
 ## Acknowledgements
 
 We have used code and been inspired by https://github.com/Parskatt/dkm, https://github.com/laoyandujiang/S3Esti, and https://github.com/ducha-aiki/affnet, https://github.com/DagnyT/hardnet, https://github.com/Reagan1311/LOCATE, https://github.com/danini/graph-cut-ransac. Sincere thanks to these authors for their codes.
+
+## cite
+@InProceedings{Sun2025learningACs,
+    author    = {Pengju Sun, Banglei Guan, Zhenbao Yu, Yang Shang, Qifeng Yu, Daniel Barath},
+    title     = {Learning Affine Correspondences by Integrating Geometric Constraints},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    month     = {June},
+    year      = {2025},
+}
