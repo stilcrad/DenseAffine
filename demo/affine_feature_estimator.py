@@ -1,7 +1,7 @@
 import warnings
 import sys
 warnings.filterwarnings("ignore")
-from affine.HardNet import HardNet
+from Network.HardNet import HardNet
 from Network.affine_estimate_network import  *
 import matplotlib
 matplotlib.use('Agg')
