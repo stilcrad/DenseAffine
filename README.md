@@ -28,7 +28,7 @@ pip install -r requirements.txt
 ```
 
 ## Get start
-Download the weights at https://pan.baidu.com/s/1EdsAqKJ1HKVS5uLPMAxDSQ?pwd=idw2 password: idw2 or [https://drive.google.com/file/d/1W82QJ5lgrsVQql30k_NZWZE5YH9lhgaE/view?usp=drive_link](https://drive.google.com/file/d/1WX6Ug0ERmT9JC5OwMVWav20RBhkKOsvr/view?usp=drive_link))).  Put it in weights folder.
+Download the weights at https://pan.baidu.com/s/1EdsAqKJ1HKVS5uLPMAxDSQ?pwd=idw2 password: idw2 or [https://drive.google.com/file/d/1WX6Ug0ERmT9JC5OwMVWav20RBhkKOsvr/view?usp=sharing])).  Put it in weights folder.
 
 We have updated the file of weights, and it may be necessary to make slight modifications to the loaded code when using it. We will open source the training code after the expansion paper is accepted.
 
