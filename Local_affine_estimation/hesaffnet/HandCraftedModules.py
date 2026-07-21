@@ -4,10 +4,10 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 import math
 import numpy as np
-from Local_affine_estimation.hesaffnet.hesaffnet import  GaussianBlur, CircularGaussKernel
+from Local_affine_estimation.hesaffnet.Utils import GaussianBlur, CircularGaussKernel
 from Local_affine_estimation.hesaffnet.LAF import abc2A,rectifyAffineTransformationUpIsUp, sc_y_x2LAFs,sc_y_x_and_A2LAFs
-from Local_affine_estimation.hesaffnet.hesaffnet import generate_2dgrid, generate_3dgrid
-from Local_affine_estimation.hesaffnet.hesaffnet import zero_response_at_border
+from Local_affine_estimation.hesaffnet.Utils import generate_2dgrid, generate_3dgrid
+from Local_affine_estimation.hesaffnet.Utils import zero_response_at_border
 
 
 class ScalePyramid(nn.Module):

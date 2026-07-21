@@ -12,14 +12,18 @@ from Network.gcransac_parameter_types import *
 import torch.nn as nn
 import warnings
 from Network.laf import *
+from torch import Tensor
 
 from Network.check import *
 
 concatenate = torch.cat
 
 # Function to load the image into a pytorch tensor
-def load_torch_image(fname,w1,h1):
-    img = K.image_to_tensor( cv2.resize(cv2.imread(fname), (int(w1), int(h1))), False).float() / 255.
+def load_torch_image(fname,w1=None,h1=None):
+    img = cv2.imread(fname)
+    if w1 is not None and h1 is not None:
+        img = cv2.resize(img, (int(w1), int(h1)))
+    img = K.image_to_tensor(img, False).float() / 255.
     img = K.color.bgr_to_rgb(img)
     return img
 #

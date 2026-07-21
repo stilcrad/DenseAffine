@@ -17,27 +17,31 @@ import torch.nn.functional as F
 
 from copy import deepcopy
 
-from hesaffnet.SparseImgRepresenter import ScaleSpaceAffinePatchExtractor
-from hesaffnet.LAF import normalizeLAFs, denormalizeLAFs, LAFs2ell, abc2A, convertLAFs_to_A23format
-from hesaffnet.Utils import line_prepender, batched_forward
-from hesaffnet.architectures import AffNetFast
+from Local_affine_estimation.hesaffnet.SparseImgRepresenter import ScaleSpaceAffinePatchExtractor
+from Local_affine_estimation.hesaffnet.LAF import normalizeLAFs, denormalizeLAFs, LAFs2ell, abc2A, convertLAFs_to_A23format
+from Local_affine_estimation.hesaffnet.Utils import line_prepender, batched_forward
+from Local_affine_estimation.hesaffnet.architectures import AffNetFast, AffNetFast4
 # from hesaffnet.HardNet import HardNet
 # from library import opt
+
+from pathlib import Path
 
 
 USE_CUDA = True
 # USE_CUDA = torch.cuda.is_available()
 WRITE_IMGS_DEBUG = False
 
-AffNetPix = AffNetFast(PS = 32)
-weightd_fname = "/home/xxx/project/python/DKM-main/hesaffnet/pretrained/AffNet.pth"
+workdir_path = Path(__file__).parent.parent.parent.resolve()
+
+AffNetPix = AffNetFast4(PS = 32)
+weightd_fname = str(workdir_path / "weights/outdoor/Aff_res_shape.pth")
 checkpoint = torch.load(weightd_fname)
 AffNetPix.load_state_dict(checkpoint['state_dict'])
 AffNetPix.eval()
 
 # HardNetDescriptor = HardNet()
 # # model_weights = opt.bindir+'pretrained/HardNet++.pth'
-# model_weights = "/home/xxx/project/python/locate-master/hesaffnet/pretrained/HardNet++.pth"
+# model_weights = workdir_path / "weights/HardNet++.pth"
 # if USE_CUDA:
 #     hncheckpoint = torch.load(model_weights, map_location='cuda:0')
 # else:
@@ -54,7 +58,7 @@ else:
 
 
 
-from hesaffnet.library import SaveImageWithKeys, packSIFTOctave
+from Local_affine_estimation.hesaffnet.library import SaveImageWithKeys, packSIFTOctave
 import cv2
 
 

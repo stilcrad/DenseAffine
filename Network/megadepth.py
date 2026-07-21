@@ -7,10 +7,9 @@ import numpy as np
 import cv2
 import skimage.io as io
 import torchvision.transforms as transforms
-import utils
 import collections
 from tqdm import tqdm
-import data_utils as data_utils
+import Network.data_utils as data_utils
 
 
 rand = np.random.RandomState(234)

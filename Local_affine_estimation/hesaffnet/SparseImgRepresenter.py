@@ -2,10 +2,10 @@ from __future__ import print_function
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-from Local_affine_estimation.hesaffnet.hesaffnet import batch_eig2x2, batched_forward
+from Local_affine_estimation.hesaffnet.Utils import batch_eig2x2, batched_forward
 from Local_affine_estimation.hesaffnet.LAF import angles2A, get_inverted_pyr_index, denormalizeLAFs, extract_patches_from_pyramid_with_inv_index
 from Local_affine_estimation.hesaffnet.LAF import get_pyramid_and_level_index_for_LAFs, normalizeLAFs, checkTouchBoundary
-from Local_affine_estimation.hesaffnet.hesaffnet import HessianResp, AffineShapeEstimator, OrientationDetector, ScalePyramid, NMS3dAndComposeA
+from Local_affine_estimation.hesaffnet.HandCraftedModules import HessianResp, AffineShapeEstimator, OrientationDetector, ScalePyramid, NMS3dAndComposeA
 import time
 
 class ScaleSpaceAffinePatchExtractor(nn.Module):

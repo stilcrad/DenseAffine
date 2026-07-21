@@ -11,7 +11,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 import os
 os.chdir("..")
-from  dataloader.megadepth import *
+from  Network.megadepth import *
 
 import torch
 

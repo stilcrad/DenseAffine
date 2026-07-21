@@ -160,6 +160,7 @@ class AffNetFast4(nn.Module):
             nn.BatchNorm2d(64, affine=False),
             nn.ReLU(),
             nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1, bias = False),
+            nn.BatchNorm2d(64, affine=False),
             nn.ReLU(),
             nn.Dropout(0.25),
             nn.Conv2d(64, 4, kernel_size=8, stride=1, padding=0, bias = True),

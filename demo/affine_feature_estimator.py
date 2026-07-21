@@ -8,8 +8,10 @@ matplotlib.use('Agg')
 from PIL import Image
 from DenseMatch.dkm import DKMv3_outdoor
 from Network.essential_matrix_affine_without_kornia import *
-from matching import match_image,drawMatches
+from .matching import match_image,drawMatches
 
+from pathlib import Path
+workdir_path = Path(__file__).parent.parent.resolve()
 
 def distance_matrix_vector(anchor, positive):
     """Given batch of anchor descriptors and positive descriptors calculate distance matrix"""
@@ -37,7 +39,7 @@ def multicompute(path1 ,path2,output_dir):
     im2_path = args.im_B_path
     with torch.no_grad():
         # Create model
-        dkm_model = DKMv3_outdoor(path_to_weights="weights/outdoor/Outdoor_matching.pth",device=device)
+        dkm_model = DKMv3_outdoor(path_to_weights=workdir_path / "weights/outdoor/Outdoor_matching.pth",device=device)
 
         H, W =Image.open(im1_path).size
 
@@ -96,7 +98,7 @@ def multicompute(path1 ,path2,output_dir):
         scale_num = 300
         angle_num = 360
 
-        esti_checkpoint_path = 'weights/outdoor/ori_scal.pth'
+        esti_checkpoint_path = workdir_path / "weights/outdoor/ori_scal.pth"
 
         device ="cuda"
         esti_scale_ratio_list = [0.5, 1, 2]
@@ -186,10 +188,10 @@ def multicompute(path1 ,path2,output_dir):
                     ACs[x][4]) + "," + str(ACs[x][5]) + "," + str(ACs[x][6]) + "," + str(ACs[x][7]) + "\n")
 
 if __name__ == '__main__':
-    imgpath1 = "data/3424741608_87876e2909_b.jpg"
-    imgpath2 = "data/3424775484_984abc7347_b.jpg"
-    output_dir = "results/ACs.txt"
-    out_path = "results/matches.jpg"
+    imgpath1 = str(workdir_path / "data/3424741608_87876e2909_b.jpg")
+    imgpath2 = str(workdir_path / "data/3424775484_984abc7347_b.jpg")
+    output_dir = str(workdir_path / "results/ACs.txt")
+    out_path = str(workdir_path / "results/matches.jpg")
     multicompute(imgpath1, imgpath2, output_dir)
     match_image(imgpath1 ,imgpath2,output_dir , out_path)
 
