@@ -17,10 +17,10 @@ import torch.nn.functional as F
 
 from copy import deepcopy
 
-from hesaffnet.SparseImgRepresenter import ScaleSpaceAffinePatchExtractor
-from hesaffnet.LAF import normalizeLAFs, denormalizeLAFs, LAFs2ell, abc2A, convertLAFs_to_A23format
-from hesaffnet.Utils import line_prepender, batched_forward
-from hesaffnet.architectures import AffNetFast
+# from .SparseImgRepresenter import ScaleSpaceAffinePatchExtractor  # Unused in inference, causes circular import
+from .LAF import normalizeLAFs, denormalizeLAFs, LAFs2ell, abc2A, convertLAFs_to_A23format
+from .Utils import line_prepender, batched_forward
+from .architectures import AffNetFast
 # from hesaffnet.HardNet import HardNet
 # from library import opt
 
@@ -31,8 +31,9 @@ WRITE_IMGS_DEBUG = False
 
 AffNetPix = AffNetFast(PS = 32)
 weightd_fname = "/home/xxx/project/python/DKM-main/hesaffnet/pretrained/AffNet.pth"
-checkpoint = torch.load(weightd_fname)
-AffNetPix.load_state_dict(checkpoint['state_dict'])
+if os.path.exists(weightd_fname):
+    checkpoint = torch.load(weightd_fname)
+    AffNetPix.load_state_dict(checkpoint['state_dict'])
 AffNetPix.eval()
 
 # HardNetDescriptor = HardNet()
@@ -54,7 +55,7 @@ else:
 
 
 
-from hesaffnet.library import SaveImageWithKeys, packSIFTOctave
+from .library import SaveImageWithKeys, packSIFTOctave
 import cv2
 
 

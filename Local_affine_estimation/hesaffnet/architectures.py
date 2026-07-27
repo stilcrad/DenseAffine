@@ -6,8 +6,8 @@ import torch.nn.init
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
-from Local_affine_estimation.hesaffnet.LAF import get_rotation_matrix
-from Local_affine_estimation.hesaffnet.LAF import rectifyAffineTransformationUpIsUp,rectifyAffineTransformationUpIsUpFullyConv
+from .LAF import get_rotation_matrix
+from .LAF import rectifyAffineTransformationUpIsUp,rectifyAffineTransformationUpIsUpFullyConv
 
 class LocalNorm2d(nn.Module):
     def __init__(self, kernel_size = 33):
