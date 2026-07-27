@@ -101,18 +101,19 @@ def match_image(path1 ,path2,ac_path , out_path):
             cv2.line(out, (int(np.round(kp1.pt[0])), int(np.round(kp1.pt[1]))), (int(np.round(kp2.pt[0])), int(np.round(kp2.pt[1])) + rows1+space_len), matchColor, 1,shift=0)
 
     cv2.imwrite(out_path, out)
-    cv2.imshow("matches",out)
-    cv2.waitKey(5000)
+    # cv2.imshow requires GUI — skip in headless environments
 
     return np.array(dist_all), num
 
 
 if __name__ == '__main__':
+    import os, sys
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-    path1 = r"E:\EVD\1\grand.png"
-    path2 = r"E:\EVD\2\grand.png"
-    ac_path = r"E:\EVD\ours_ACs\grand_ACs.txt"
-    H_path = r"E:\EVD\h\grand.txt"
-    dist_all, num = match_image(path1, path2, ac_path,H_path,"grand")
+    path1 = "data/3424741608_87876e2909_b.jpg"
+    path2 = "data/3424775484_984abc7347_b.jpg"
+    ac_path = "results/ACs.txt"
+    out_path = "results/matches.jpg"
+    dist_all, num = match_image(path1, path2, ac_path, out_path)
 
 

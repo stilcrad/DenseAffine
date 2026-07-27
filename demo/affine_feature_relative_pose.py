@@ -1,7 +1,7 @@
 import warnings
 import sys
 warnings.filterwarnings("ignore")
-from affine.HardNet import HardNet
+from Network.HardNet import HardNet
 from Network.affine_estimate_network import  *
 import matplotlib
 matplotlib.use('Agg')
@@ -205,8 +205,8 @@ def multicompute(path1 ,path2):
         descriptor.load_state_dict(hncheckpoint['state_dict'])
         descriptor.eval()
 
-        im1 = load_torch_image(im1_path)
-        im2 = load_torch_image(im2_path)
+        im1 = load_torch_image(im1_path, W_A, H_A)
+        im2 = load_torch_image(im2_path, W_B, H_B)
         descriptor = LAFDescriptor(HardNet(True))
         weight_path = "weights/outdoor/Aff_res_shape.pth"
         affnet = LAFAffNetShapeEstimator(weight_path).cuda()
@@ -256,12 +256,12 @@ if __name__ == '__main__':
     for squ in squ_list:
         print(squ)
         n = 300
-        root_path = "data/kitti/sequences/{}/".format(
+        root_path = "/data/kitti/sequences/{}/".format(
             squ)
         img_list = os.listdir(os.path.join(root_path, "image_0"))
-        calibtxt = "data/kitti/sequences/{}/calib.txt".format(
+        calibtxt = "/data/kitti/sequences/{}/calib.txt".format(
             squ)
-        groundtruth_posepath = "data/kitti/relativepose/relativepose{}.txt".format(
+        groundtruth_posepath = "/data/kitti/relativepose/relativepose{}.txt".format(
             squ)
 
         K1 = np.loadtxt('data/kitti/cali/kitti_{}.K'.format(squ))
@@ -280,8 +280,10 @@ if __name__ == '__main__':
         for i in range(len(img_list) - 1):
             path1 = os.path.join(os.path.join(root_path, "image_0"), "{}.png".format(str(i).rjust(6, '0')))
             path2 = os.path.join(os.path.join(root_path, "image_0"), "{}.png".format(str(i + 1).rjust(6, '0')))
-            img1 = load_torch_image(path1)
-            img2 = load_torch_image(path2)
+            W_A, H_A = Image.open(path1).size
+            W_B, H_B = Image.open(path2).size
+            img1 = load_torch_image(path1, W_A, H_A)
+            img2 = load_torch_image(path2, W_B, H_B)
             img1.to(device)
             img2.to(device)
             E_gt = E_gt_all[i]
@@ -291,73 +293,34 @@ if __name__ == '__main__':
             DKM_5pc_pc_list = []
             DenseAffine_2ac_errorlist = []
 
-            with open("/home/xxx/project/ECCV/DKM/kitti_0/pc_{}/out_PC{}.txt".format(squ,i), "r") as f1:
-                the_pc = f1.readlines()
-                PCs_DKM = np.array([np.array([float(i) for i in j.split(",")[:4]]) for j in the_pc])[:n]
-                DKM_pt1 = PCs_DKM[:, 0:2]
-                DKM_pt2 = PCs_DKM[:, 2:4]
-
-            pt1, pt2, ACs = multicompute(path1 ,path2)
-
-
+            pt1, pt2, ACs = multicompute(path1, path2)
 
             pt1 = pt1[:n]
             pt2 = pt2[:n]
             ACs = ACs[:n]
 
-            tentatives_dkm = [0.5] * PCs_DKM.shape[0]
-
-            tentatives = [i for i in range(len(DKM_pt1))]
-
-            DKM5pcE, _mask = verify_cv2_ess(DKM_pt1, DKM_pt2, tentatives, K1, K2, img1.shape[2],
-                                                          # The height of the source image
-                                                          img1.shape[3],  # The width of the source image
-                                                          img2.shape[2],  # The height of the destination image
-                                                          img2.shape[3],  # The width of the destination image
-                                            )
-
-            DKM_5pc_R_error, DKM_5pc_T_error = calculate_error_new(GTpose[i].reshape(3, 4), DKM5pcE)
-            DKM_5pc_errorlist.append([DKM_5pc_R_error, DKM_5pc_T_error])
-
-
-
-
-
             ACs_ours = ACs
-            ours_pt1 = ACs_ours[:, 0:2]
-            ours_pt2 = ACs_ours[:, 2:4]
-            ours_affines = ACs_ours[:, 4:8]
             tentatives_ours = [0.5] * ACs_ours.shape[0]
             t = time()
-            ours_E, ours_mask = verify_affine_pygcransac_essential_matrix(ACs_ours,  # The input affine correspondences
+            ours_E, ours_mask = verify_affine_pygcransac_essential_matrix(ACs_ours,
                                                                           tentatives_ours,
-                                                                          # The matches containing the indices of the matched keypoints
                                                                           img1.shape[2],
-                                                                          # The height of the source image
                                                                           img1.shape[3],
-                                                                          # The width of the source image
                                                                           img2.shape[2],
-                                                                          # The height of the destination image
                                                                           img2.shape[3],
-                                                                          # The width of the destination image
                                                                           K1,
                                                                           K1,
-                                                                          Sampler.ARSampler.value)  # The id of the used sampler. 0 - uniform, 1 - PROSAC, 3 - NG-RANSAC's sampler, 4 - AR-Sampler
+                                                                          Sampler.ARSampler.value)
 
             ours_R_error, ours_T_error = calculate_error_new(GTpose[i].reshape(3, 4), ours_E)
             DenseAffine_2ac_errorlist.append([ours_R_error, ours_T_error])
+            print(f"  Frame {i}: R_error={ours_R_error:.4f} deg, T_error={ours_T_error:.4f} deg")
     ours_R_errorlist = [i[0] for i in DenseAffine_2ac_errorlist]
     ours_T_errorlist = [i[1] for i in DenseAffine_2ac_errorlist]
-    dkm_5pc_R_errorlist = [i[0] for i in DKM_5pc_errorlist]
-    dkm_5pc_T_errorlist = [i[1] for i in DKM_5pc_errorlist]
     ours_R_median_error = np.median(ours_R_errorlist)
-    dkm_5pc_R_median_error = np.median(dkm_5pc_R_errorlist)
     ours_T_median_error = np.median(ours_T_errorlist)
-    dkm_5pc_T_median_error = np.median(dkm_5pc_T_errorlist)
     print("ours_R_median_error:", ours_R_median_error)
-    print("dkm_5pc_R_median_error:", dkm_5pc_R_median_error)
     print("ours_T_median_error:", ours_T_median_error)
-    print("dkm_5pc_T_median_error:", dkm_5pc_T_median_error)
 
 
 
