@@ -1,10 +1,9 @@
 import math
 
-import knn
 import numpy as np
 import torch
 import torch.nn as nn
-import vgg
+from .. import knn, vgg
 
 
 class EstiNet(nn.Module):

@@ -3,7 +3,7 @@ import math
 import numpy as np
 import torch
 import torch.nn.functional as F
-from affine.abso_esti_model.abso_esti_image_set import get_affine_patch
+from .abso_esti_image_set import get_affine_patch
 from scipy.ndimage.filters import maximum_filter
 
 
