@@ -10,8 +10,8 @@ from Local_affine_estimation.hesaffnet.hesaffnet import AffNetHardNet_describeFr
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 import os
-os.chdir("..")
-from  dataloader.megadepth import *
+# os.chdir("..")  # Commented out: breaks imports, not needed for inference
+# from dataloader.megadepth import *  # Commented out: dataloader module not available
 
 import torch
 

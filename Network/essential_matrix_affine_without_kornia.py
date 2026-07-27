@@ -5,6 +5,7 @@ import pygcransac
 from copy import deepcopy
 import kornia as K
 import kornia.feature as KF
+from kornia.feature import extract_patches_from_pyramid, make_upright, get_laf_scale, rotate_laf
 import torch
 from kornia_moons.feature import *
 from time import time
@@ -14,6 +15,8 @@ import warnings
 from Network.laf import *
 
 from Network.check import *
+from kornia.core import Tensor
+from utils import rad2deg, deg2rad, angle_to_rotation_matrix
 
 concatenate = torch.cat
 
@@ -38,7 +41,7 @@ def map_location_to_cpu(storage, *args, **kwargs) :
 class LAFAffNetShapeEstimator(nn.Module):
 
 
-    def __init__(self, pretrained: bool = False, preserve_orientation: bool = True, weight_path: str ="/home/xxx/project/python/DenseAffine/weights/outdoor/Aff_res_shape.pth" ) -> None:
+    def __init__(self, weight_path: str = "weights/outdoor/Aff_res_shape.pth", pretrained: bool = True, preserve_orientation: bool = True) -> None:
         super().__init__()
         self.features = nn.Sequential(
             nn.Conv2d(1, 16, kernel_size=3, padding=1, bias=False),
@@ -60,7 +63,7 @@ class LAFAffNetShapeEstimator(nn.Module):
             nn.BatchNorm2d(64, affine=False),
             nn.ReLU(),
             nn.Dropout(0.25),
-            nn.Conv2d(64, 3, kernel_size=8, stride=1, padding=0, bias=True),
+            nn.Conv2d(64, 4, kernel_size=8, stride=1, padding=0, bias=True),
             nn.Tanh(),
             nn.AdaptiveAvgPool2d(1),
         )
@@ -94,9 +97,9 @@ class LAFAffNetShapeEstimator(nn.Module):
         B, N = laf.shape[:2]
         PS: int = self.patch_size
         patches: torch.Tensor = extract_patches_from_pyramid(img, make_upright(laf), PS, True).view(-1, 1, PS, PS)
-        xy = self.features(self._normalize_input(patches)).view(-1, 3)
-        a1 = torch.cat([1.0 + xy[:, 0].reshape(-1, 1, 1), 0 * xy[:, 0].reshape(-1, 1, 1)], dim=2)
-        a2 = torch.cat([xy[:, 1].reshape(-1, 1, 1), 1.0 + xy[:, 2].reshape(-1, 1, 1)], dim=2)
+        xy = self.features(self._normalize_input(patches)).view(-1, 4)
+        a1 = torch.cat([1.0 + xy[:, 0].reshape(-1, 1, 1), xy[:, 1].reshape(-1, 1, 1)], dim=2)
+        a2 = torch.cat([xy[:, 2].reshape(-1, 1, 1), 1.0 + xy[:, 3].reshape(-1, 1, 1)], dim=2)
         new_laf_no_center = torch.cat([a1, a2], dim=1).reshape(B, N, 2, 2)
         new_laf = torch.cat([new_laf_no_center, laf[:, :, :, 2:3]], dim=3)
         scale_orig = get_laf_scale(laf)
